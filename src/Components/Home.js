@@ -1,38 +1,57 @@
-import React,{useState} from 'react';
-import Form from './Form';
-import ProfileView from './ProfileView';
+import React,{useReducer} from 'react'; 
+import Form from './Form'; 
+//import ProfileView from './ProfileView';
 
-const Home= () =>{
+const initState = {
+  form: {
+    username: '',
+  },
+  errors: {},
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'form':
+      return {
+    ...state,
+    form: {
+      ...state.form,
+      [action.payload.name]: action.payload.value,
+    }
+    };
+    case 'errors':
+      return {
+    ...state,
+    errors: {
+      ...state.errors,
+    }
+    };
+    default:
+      throw new Error();
+  }
+}
  
-   
-    const [userInfo, setUserInfo] = useState({
-
-        userName: 'Gabriela',
-        userLast: 'Carmona',
-        email: 'gaby@gmail.com',
-        password: '',
-        confirm: '',
-    });
-
-    
-    const handlChange = (event) =>{
+const Home= () =>{
+  const [state, dispatch] = useReducer(reducer, initState);
+     
+    const handlChange = (event) =>{ 
         const{target} = event;
         console.log(target.name)
-      
-        setUserInfo({
-            ...userInfo,
-            [target.name] : target.value,
-        })
+    
+    dispatch({type: 'form', action: {name: target.name, value: target.value}});
     }
-
-    return(
-        <div>
-         <h1>Registro</h1>
-         <Form userName={userInfo.userName} userLast={userInfo.userLast} email={userInfo.email} password={userInfo.password} confirmPassword={userInfo.confirm} handlChange={handlChange}  />
-         <ProfileView userName={userInfo.userName} userLast={userInfo.userLast} email={userInfo.email} password={userInfo.password} confirm={userInfo.confirm}/>
-        </div>
-    )
+ 
+    return( 
+        <div> 
+         <h1>Registro</h1> 
+         <Form reduState={state} handlChange={handlChange} /> 
+         {/*<ProfileView userName={userInfo.userName} userLast={userInfo.userLast} email={userInfo.email} password={userInfo.password} confirm={userInfo.confirm}/>*/}
+        </div> 
+    ) 
 }
+
+
+
 
 export default Home;
 
