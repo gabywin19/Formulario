@@ -1,7 +1,7 @@
 import React from "react";
 
-const ProfileView= (props) =>{
-  const {userName, userLast, email, password, confirm} = props
+const ProfileView= ({ formState }) =>{
+  const {userName, userLast, email, password, confirm} = formState;
 
   return(
     <div>
